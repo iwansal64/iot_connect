@@ -4,6 +4,10 @@
 #include <WiFi.h>
 #include <additionals.h>
 #include <ArduinoJson.h>
+#include <PubSubClient.h>
+
+WiFiClient esp32_client;
+PubSubClient mqtt_client(esp32_client);
 
 const String DEVICE_INITIALIZATION_URL = "";
 
@@ -17,10 +21,13 @@ private:
     void debug_log(String text) {
         Serial.println("[IOT CONNECT] "+String(text));
     }
+
+    void check_connection(void);
     
 public:
     iot_connect(char* UUID);
-    void connect( );
+    void connect(void);
+    void loop(void);
 };
 
 
@@ -33,6 +40,9 @@ iot_connect::iot_connect(char* UUID)
 }
 
 //ANCHOR - Connecting to MQTT
+
+// ### Initial Connection
+// Connecting Device to the IoT Connect Service
 void iot_connect::connect() {
     // Check if the ESP connected to a WiFi or not.
     if (WiFi.status() == WL_CONNECTED) {
@@ -52,16 +62,26 @@ void iot_connect::connect() {
         DeserializationError error = deserializeJson(doc, response);
         
         if(error) {
-            
             return;
         }
-        
     
         http.end(); // Free resources
     } 
     else {
         this->debug_log("WiFi Disconnected...");
     }
+}
+
+// ### Check Connection
+// This function is used to check the connection between ESP32 and MQTT server
+void iot_connect::check_connection() {
+
+}
+
+// ### Main Loop
+// This function must be called once under `void loop()`
+void iot_connect::loop() {
+    
 }
 
 //!SECTION
