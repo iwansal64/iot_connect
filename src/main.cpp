@@ -1,20 +1,19 @@
 #define MQTT_VERSION MQTT_VERSION_3_1_1
 
 #include <Arduino.h>
-#include <iot_connect.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 
 #define LED_R 32
 #define LED_B 33
 
-#define WIFI_SSID "fh_a5a180"
-#define WIFI_PASS "24G_is_the_best"
+#define WIFI_SSID "TEAM IT"
+#define WIFI_PASS "1TM1TR4101101MIVHS2025"
 
-#define MQTT_SERVER_URL "192.168.1.8"
+#define MQTT_SERVER_URL "192.168.9.134"
 #define MQTT_SERVER_PORT 1883
 #define MQTT_USER "iwan"
-#define MQTT_PASS "iwan123"
+#define MQTT_PASS "Iwan123"
 
 WiFiClient esp_client;
 PubSubClient mqtt_client(esp_client);
