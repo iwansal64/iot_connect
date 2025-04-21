@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.cs": "csharp",
+        "*.html": "html",
+        "unordered_map": "cpp",
+        "tuple": "cpp"
+    }
+}
