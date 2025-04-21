@@ -52,8 +52,6 @@ public:
 
     static IoTConnect* instance;
     static void static_mqtt_handler(char* topic, byte* payload, unsigned int length) {
-        Serial.println("[IoTConnect] TEST");
-
         if(instance != nullptr) {
             instance->mqtt_handler(topic, payload, length);
         }
@@ -81,6 +79,7 @@ IoTConnect::IoTConnect(String device_key, String device_pass)
 void IoTConnect::connect() {
     // Check if the ESP connected to a WiFi or not.
     mqtt_client.setServer(MQTT_SERVER_URL, MQTT_SERVER_PORT);
+    mqtt_client.setKeepAlive(60);
     
     if (WiFi.status() == WL_CONNECTED) {
         HTTPClient http_client;
@@ -137,6 +136,7 @@ void IoTConnect::loop() {
     if(this->subscribed_topics.size() > 0) {
         this->check_connection();
     }
+    mqtt_client.loop();
 }
 
 void IoTConnect::mqtt_handler(char* topic, byte* payload, unsigned int length) {
@@ -145,8 +145,6 @@ void IoTConnect::mqtt_handler(char* topic, byte* payload, unsigned int length) {
     for (uint32_t i = 0; i < length; i++) {
         msg += (char)payload[i];
     }
-
-    this->debug_log("TEST");
 
     for(uint8_t i = 0; i < this->subscribed_topics.size(); i++) {
         if(subscribed_topics[i].topic_name == topic) {
@@ -199,7 +197,7 @@ void IoTConnect::bind_controllable(void (*callback)(String value), String contro
     }
 
     mqtt_client.subscribe(response_data[0].c_str());
-    this->debug_log("Successfully Subscribed to this topic:"+response_data[0]);
+    this->debug_log("Successfully Subscribed to this topic: ["+response_data[0]+"]");
 
     this->subscribed_topics.push_back({
         response_data[0],
